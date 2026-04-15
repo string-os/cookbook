@@ -79,8 +79,9 @@ See chapter [03 — Client library](./03-client-library.md) for the API, the sin
 | 01 | [**Anatomy of an SFMD app**](./01-anatomy.md) | What the `weather` app is made of — frontmatter, action blocks, field schemas, shell-safe substitution — and how larger apps compose multiple files. |
 | 02 | [**Why markdown + /command**](./02-compare.md) | The same weather capability built as an MCP server and as a function-calling tool, side by side with the SFMD version. |
 | 03 | [**Client library**](./03-client-library.md) | Embedding `@string-os/client` in an agent framework. API reference and the single-tool pattern. |
+| 04 | [**Porting Nano Banana Pro**](./04-porting-nano-banana-pro.md) | Worked example: take a real Codex skill (image generation via Gemini 3 Pro Image) and port it to a single-file SFMD app. The recipe transfers to any HTTP-based skill. |
 
-Four chapters. The cookbook is deliberately narrow — its job is to make one thing viscerally clear: **the agent-facing interface is markdown plus a small set of commands, and most of the tools an AI needs fit that shape.**
+Five chapters. The cookbook is deliberately narrow — its job is to make one thing viscerally clear: **the agent-facing interface is markdown plus a small set of commands, and most of the tools an AI needs fit that shape.**
 
 ---
 
