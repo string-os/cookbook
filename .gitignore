@@ -3,3 +3,7 @@
 node_modules/
 .vscode/
 .idea/
+
+# stringd daemon working directory (created when `string` commands run from
+# this dir without an explicit STRINGD_DATA_DIR)
+.stringd/

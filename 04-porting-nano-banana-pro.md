@@ -263,6 +263,17 @@ Other things the SFMD port skips entirely:
 - **No manual error parsing from API responses.** Non-2xx responses get their body forwarded as the action's error message — the agent sees the API's actual `{"error": {"message": "..."}}` content, not just `HTTP 503`.
 - **No `--api-key` flag in the action surface.** The header line resolves `$GEMINI_API_KEY` from the daemon's env, set once at startup.
 
+And the agent itself doesn't have to think about any of the above. When it inspects the app via `/act` or `/act.<name> --help`, it sees only the call interface — verb name, fields, descriptions:
+
+```
+/act.generate
+   --prompt <string> (required) — Image description
+   --filename <string> (required) — Output path (yyyy-mm-dd-hh-mm-ss-name.png recommended)
+   --resolution <string> (optional) — 1K, 2K, or 4K
+```
+
+The body template, the URL, the response extraction directives, the `$GEMINI_API_KEY` reference — all hidden as implementation. If a curious agent (or human auditor) wants to see what the action actually does on the wire, `/source` dumps the raw `.md` file. Otherwise, the runtime's job is to make the call, and the agent's job is to call the verb. Two layers, one contract.
+
 ---
 
 ## The general pattern

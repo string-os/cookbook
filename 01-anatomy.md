@@ -162,6 +162,34 @@ The template author does not write quoting logic. The runtime does it once, the 
 
 ---
 
+## What the agent sees vs what's hidden
+
+When an agent inspects the action via `/act`, `/act.<name> --help`, or the `[actions]` hint at the top of `/open`, it gets exactly the **call interface**: the verb name, each field's type and required-ness, and the description. Nothing more.
+
+```
+/act.now
+   --city <string> (required) — City name
+```
+
+It does **not** see:
+
+- the underlying method (`CLI` vs `POST` vs `GET` etc.)
+- the URL or the bash template
+- the request `body:` template, headers, or `$VAR` references
+- the response-template `save:` / `decode:` / `to:` directives
+
+Those are *implementation* — the runtime's job, not the agent's. Hiding them keeps the help surface focused on "what to call, what to pass" and saves prompt tokens on every call.
+
+When you genuinely need to inspect what's behind an action — security audit, debugging an unexpected response, curiosity about the underlying API — `/source` dumps the raw `.md` file, including frontmatter, body, action blocks, and response templates:
+
+```bash
+string app:weather '/source'
+```
+
+`/source` is the escape hatch. Reach for it when you need to see the implementation; otherwise let the runtime do its job.
+
+---
+
 ## Response handling
 
 For `CLI` actions, stdout becomes the action result. Stderr is appended. A non-zero exit code surfaces as an error with a code like `EXIT_1`.
