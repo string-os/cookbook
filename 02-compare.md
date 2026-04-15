@@ -26,7 +26,7 @@ type: app
 ---
 
 ```act.now
-CLI curl -s -G -d format=%l:+%C+%t+%w -d m https://wttr.in/{city}
+GET https://wttr.in/{city}?format=%l:+%C+%t+%w&m
   city: string (required) "City name"
 ```
 ````

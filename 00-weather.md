@@ -86,21 +86,26 @@ string app:weather '/open app:weather'
 <𝒞=string:app:weather>
 Opened .string/packages/weather/index.md
 ---
-[actions] /act.now --city <string> | /act.forecast --city <string>
+[actions] /act.now --city <string> | /act.forecast --city <string> | /act.search --q <string>
           /act.<name> --help for details
 
 
 # Weather
 
-A two-action weather app, backed by [wttr.in][@link-1] — no API
-key, no signup, no server to run. Works the moment it is installed.
+A three-action weather app, backed by [wttr.in][@link-1] for the
+weather data and [Nominatim][@link-2] (OpenStreetMap) for resolving
+city names. No API key, no signup, no server to run. Works the
+moment it is installed.
 
 ## Actions
 
 - `/act.now --city <name>` — current conditions, one line
 - `/act.forecast --city <name>` — detailed forecast with wind and humidity
+- `/act.search --q <query>` — resolve a free-form location query to
+  canonical names you can pass to `now` / `forecast`.
 
-For multi-word cities, use `+` in place of spaces: `--city New+York`.
+For multi-word cities passed directly to `now` / `forecast`, use `+` in
+place of spaces: `--city New+York`. Or pass them through `search` first.
 </𝒞>
 ```
 
@@ -176,15 +181,15 @@ $ string app:weather '/open app:weather'
 <𝒞=string:app:weather>
 Opened .string/packages/weather/index.md
 ---
-[actions] /act.now --city <string> | /act.forecast --city <string>
+[actions] /act.now --city <string> | /act.forecast --city <string> | /act.search --q <string>
           /act.<name> --help for details
 
 
 # Weather
 
-A two-action weather app, backed by [wttr.in][@link-1] — no API
-key, no signup, no server to run. Works the moment it is installed.
-...
+A three-action weather app, backed by [wttr.in][@link-1] for the
+weather data and [Nominatim][@link-2] (OpenStreetMap) for resolving
+city names. ...
 </𝒞>
 
 $ string app:weather '/act.now --city Seoul'

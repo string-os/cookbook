@@ -25,12 +25,12 @@ For multi-word cities passed directly to `now` / `forecast`, use `+` in
 place of spaces: `--city New+York`. Or pass them through `search` first.
 
 ```act.now
-CLI curl -s --max-time 10 -G -d format=%l:+%C+%t+%w -d m https://wttr.in/{city}
+GET https://wttr.in/{city}?format=%l:+%C+%t+%w&m
   city: string (required) "City name"
 ```
 
 ```act.forecast
-CLI curl -s --max-time 10 -G -d format=%l:+%C+%t+%w+%h+%p -d m https://wttr.in/{city}
+GET https://wttr.in/{city}?format=%l:+%C+%t+%w+%h+%p&m
   city: string (required) "City name"
 ```
 

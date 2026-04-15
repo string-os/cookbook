@@ -20,7 +20,7 @@ type: app
 ---
 
 ```act.now
-CLI curl -s -G -d format=%l:+%C+%t+%w -d m https://wttr.in/{city}
+GET https://wttr.in/{city}?format=%l:+%C+%t+%w&m
   city: string (required) "City name"
 ```
 ````
@@ -33,8 +33,8 @@ Installed app:weather
 
 $ string app:weather '/open app:weather'
 # Weather
-A two-action weather app, backed by wttr.in...
-[actions] /act.now --city <string> | ...
+A three-action weather app, backed by wttr.in and Nominatim...
+[actions] /act.now --city <string> | /act.forecast --city <string> | /act.search --q <string>
 
 $ string app:weather '/act.now --city Seoul'
 seoul: Sunny +20°C ↘6km/h

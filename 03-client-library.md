@@ -70,7 +70,7 @@ Test it:
 ```typescript
 console.log(await stringTool("app:weather", "/open app:weather"));
 // # Weather
-// A two-action weather app...
+// A three-action weather app...
 
 console.log(await stringTool("app:weather", "/act.now --city Seoul"));
 // seoul: Sunny +20°C ↘6km/h
