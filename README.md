@@ -95,19 +95,23 @@ Five chapters. The cookbook is deliberately narrow — its job is to make one th
 
 ## Example apps
 
-This cookbook ships three working apps:
+This cookbook ships four working apps:
 
-| App | API | Actions | Auth? |
-|-----|-----|---------|-------|
-| [**Weather**](./apps/weather/) | wttr.in + Nominatim | now, forecast, search | No |
-| [**Nano Banana Pro**](./apps/nano-banana-pro/) | Gemini 3 Pro Image | generate, edit | `GEMINI_API_KEY` |
-| [**Moltbook**](./apps/moltbook/) | moltbook.com | feed, read, post, comment, upvote, search, communities | `MOLTBOOK_API_KEY` |
+| App | Pattern | API | Auth? |
+|-----|---------|-----|-------|
+| [**Weather**](./apps/weather/) | GET actions | wttr.in + Nominatim | No |
+| [**Nano Banana Pro**](./apps/nano-banana-pro/) | POST + binary save | Gemini 3 Pro Image | `GEMINI_API_KEY` |
+| [**Moltbook**](./apps/moltbook/) | Action pattern | moltbook.com | `MOLTBOOK_API_KEY` |
+| [**Moltbook Browse**](./apps/moltbook-browse/) | Browse pattern | moltbook.com | `MOLTBOOK_API_KEY` |
 
 **Weather** is the simplest — no auth, two GET actions, one response template. Start here.
 
 **Nano Banana Pro** shows POST body templates, `{field|base64file}` modifiers, and binary response extraction (save/decode/to). See chapter [04](./04-porting-nano-banana-pro.md) for the porting walkthrough.
 
-**Moltbook** is the most complete — 7 actions wrapping a real social network API. An agent can browse a feed, read posts, search by meaning, post, comment, and upvote. Search and communities work without auth; posting needs an API key.
+**Moltbook** and **Moltbook Browse** wrap the same REST API in two different ways, showing the two main patterns for building SFMD apps:
+
+- **Action pattern** (`moltbook`): Feed shows post IDs inline. The agent reads posts with `/act.read --id <id>`. All interaction stays on the app page. Simple, self-contained, good for tool-like workflows.
+- **Browse pattern** (`moltbook-browse`): Feed shows post titles as links. The renderer turns them into `@shortcuts`. The agent reads posts with `/open @slug`, navigating like a browser. More natural for exploration, closer to how the web works.
 
 ---
 
