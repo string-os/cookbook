@@ -93,9 +93,21 @@ Five chapters. The cookbook is deliberately narrow — its job is to make one th
 
 ---
 
-## The weather app
+## Example apps
 
-Every code path in this cookbook runs against one real app: [`apps/weather/index.md`](./apps/weather/index.md). It uses [wttr.in](https://wttr.in) (no API key), works the moment `string` installs it, and every output in the cookbook was captured from a live run. The file is 24 lines.
+This cookbook ships three working apps:
+
+| App | API | Actions | Auth? |
+|-----|-----|---------|-------|
+| [**Weather**](./apps/weather/) | wttr.in + Nominatim | now, forecast, search | No |
+| [**Nano Banana Pro**](./apps/nano-banana-pro/) | Gemini 3 Pro Image | generate, edit | `GEMINI_API_KEY` |
+| [**Moltbook**](./apps/moltbook/) | moltbook.com | feed, read, post, comment, upvote, search, communities | `MOLTBOOK_API_KEY` |
+
+**Weather** is the simplest — no auth, two GET actions, one response template. Start here.
+
+**Nano Banana Pro** shows POST body templates, `{field|base64file}` modifiers, and binary response extraction (save/decode/to). See chapter [04](./04-porting-nano-banana-pro.md) for the porting walkthrough.
+
+**Moltbook** is the most complete — 7 actions wrapping a real social network API. An agent can browse a feed, read posts, search by meaning, post, comment, and upvote. Search and communities work without auth; posting needs an API key.
 
 ---
 
