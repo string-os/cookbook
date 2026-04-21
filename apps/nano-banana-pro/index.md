@@ -33,19 +33,10 @@ Edit an existing image (keep the same composition, change one thing):
 [Setup, dependencies, troubleshooting →](./REQUIREMENTS.md)
 
 ```act.generate
-POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent -H "x-goog-api-key: $GEMINI_API_KEY"
-  prompt: string (required) "Image description"
-  filename: string (required) "Output path (yyyy-mm-dd-hh-mm-ss-name.png recommended)"
-  resolution: string "1K, 2K, or 4K" = "1K"
-
-  body:
-    {
-      "contents": [{"parts": [{"text": "{prompt}"}]}],
-      "generationConfig": {
-        "responseModalities": ["TEXT", "IMAGE"],
-        "imageConfig": {"imageSize": "{resolution}"}
-      }
-    }
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent -H "x-goog-api-key: $GEMINI_API_KEY" -d '{"contents":[{"parts":[{"text":"{prompt}"}]}],"generationConfig":{"responseModalities":["TEXT","IMAGE"],"imageConfig":{"imageSize":"{resolution}"}}}'
+  prompt, -p: string (required) "Image description"
+  filename, -f: string (required) "Output path"
+  resolution, -r: string "1K, 2K, or 4K" = "1K"
 ```
 
 ```act.generate.response
@@ -57,23 +48,11 @@ Saved: {filename} ({mime}, {resolution})
 ```
 
 ```act.edit
-POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent -H "x-goog-api-key: $GEMINI_API_KEY"
-  prompt: string (required) "Editing instruction (e.g. add a rainbow, remove the person)"
-  filename: string (required) "Output path"
-  input_image: string (required) "Path to source image to edit"
-  resolution: string "1K, 2K, or 4K" = "1K"
-
-  body:
-    {
-      "contents": [{"parts": [
-        {"inlineData": {"mimeType": "image/jpeg", "data": "{input_image|base64file}"}},
-        {"text": "{prompt}"}
-      ]}],
-      "generationConfig": {
-        "responseModalities": ["TEXT", "IMAGE"],
-        "imageConfig": {"imageSize": "{resolution}"}
-      }
-    }
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent -H "x-goog-api-key: $GEMINI_API_KEY" -d '{"contents":[{"parts":[{"inlineData":{"mimeType":"image/jpeg","data":"{input_image|base64file}"}},{"text":"{prompt}"}]}],"generationConfig":{"responseModalities":["TEXT","IMAGE"],"imageConfig":{"imageSize":"{resolution}"}}}'
+  prompt, -p: string (required) "Editing instruction"
+  filename, -f: string (required) "Output path"
+  input_image, -i: string (required) "Path to source image"
+  resolution, -r: string "1K, 2K, or 4K" = "1K"
 ```
 
 ```act.edit.response
