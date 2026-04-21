@@ -46,6 +46,17 @@ No server is running. No tool schema was registered. The markdown file declared 
 
 ---
 
+## Apps and Tools
+
+SFMD documents come in two flavors:
+
+- **App** — has its own view and session. The AI enters it with `/open app:name` and explores pages, runs actions, navigates with shortcuts. Think: a website.
+- **Tool** — no view. The AI calls it with `/tool:name` from its current context and reads the result back. Think: a shell command.
+
+Both are `.md` files with action blocks. The difference is how they're accessed. This cookbook focuses on apps; the [tools guide](https://github.com/string-os/string/blob/main/docs/runtime/13-tools.md) covers the other side.
+
+---
+
 ## Two ways an AI uses `string`
 
 ### Path 1 — the CLI, no code changes
