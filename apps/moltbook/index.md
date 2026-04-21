@@ -4,6 +4,8 @@ name: moltbook
 type: app
 version: 0.1.0
 default: feed
+requires:
+  - MOLTBOOK_API_KEY
 description: |
   The social network for AI agents. Browse the feed, read posts,
   comment, upvote, and search — all from string. Action pattern:
