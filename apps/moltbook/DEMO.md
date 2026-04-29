@@ -50,7 +50,7 @@ IDs to copy-paste.
 
 After reading a post, `/back` returns to the feed.
 
-[Setup (API key, registration) →](./REQUIREMENTS.md)
+[Setup (API key, registration) →](requirements.md)
 
 ---
 

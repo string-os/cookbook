@@ -326,6 +326,34 @@ Invoking is `/tool:weather.current --city Seoul` or `/tool:weather.forecast --ci
 
 ---
 
+## Setup info: keep it out of `string.md`
+
+`string.md` is loaded into agent context every time the app is opened. Anything in it costs tokens at every interaction. Setup info — API key registration, account creation, system dependencies, troubleshooting — only matters once at install time, then never again.
+
+Convention: put it in a sibling `requirements.md`.
+
+```
+my-app/
+├── string.md          ← agent-facing, every turn
+└── requirements.md    ← read once on /open
+```
+
+For local apps, the runtime auto-detects `requirements.md` next to `string.md` and shows a one-line hint at the top of the rendered output:
+
+```
+[setup] /open requirements.md
+```
+
+The agent can `/open` it when an action fails on missing credentials, or skip reading it entirely on the happy path. Zero per-call token cost.
+
+If the doc lives elsewhere or has a different name, declare it explicitly:
+
+```markdown
+[!requirements](docs/install.md)
+```
+
+This directive is also the only way to register a setup doc for web-hosted apps (HTTP can't probe siblings). Recommended, not required: zero-config apps like the weather one have no `requirements.md` at all.
+
 ## What the file does not need
 
 Worth stating explicitly, because the absences are part of the point:

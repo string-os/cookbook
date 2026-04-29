@@ -32,8 +32,6 @@ Required fields bind positionally in declaration order (`prompt`, `filename`, th
 - **Prompts pass through as-is** — don't sanitize or rewrite. Only rework if the user's wording is so vague the model would have to guess.
 - **Editing keeps everything else.** Prefix `/act.edit` prompts with *"Change ONLY: <thing>. Keep identical: composition, lighting, palette, background, text."* Otherwise the model drifts.
 
-[Setup, dependencies, troubleshooting →](./REQUIREMENTS.md)
-
 ```act.generate
 POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent -H "x-goog-api-key: $GEMINI_API_KEY" -d '{"contents":[{"parts":[{"text":"{prompt}"}]}],"generationConfig":{"responseModalities":["TEXT","IMAGE"],"imageConfig":{"imageSize":"{resolution}"}}}'
   prompt, -p: string (required) "Image description"
