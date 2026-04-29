@@ -335,24 +335,60 @@ Convention: put it in a sibling `requirements.md`.
 ```
 my-app/
 ├── string.md          ← agent-facing, every turn
-└── requirements.md    ← read once on /open
+└── requirements.md    ← read once on /open, when something breaks
 ```
 
-For local apps, the runtime auto-detects `requirements.md` next to `string.md` and shows a one-line hint at the top of the rendered output:
+The runtime never auto-prepends a "see requirements.md" line to your `string.md` body. You decide whether and how to mention it. Three options:
+
+- **Don't mention it.** The agent finds requirements.md only when something fails (see below). Lowest per-turn token cost. Best for apps where the happy path doesn't need it.
+- **Mention it briefly.** One-line hint in the body: `Setup → [requirements](requirements.md)`. Useful when the user might want to inspect setup proactively.
+- **Don't have one.** Zero-config apps like `weather` have no `requirements.md` at all. The runtime won't pretend there is one.
+
+### What the runtime does automatically
+
+Two safety nets surface `requirements.md` exactly when it matters:
+
+**1. Missing env var warning at `/open`.** Declare prerequisites in frontmatter:
+
+```yaml
+---
+requires:
+  - MOLTBOOK_API_KEY
+---
+```
+
+If the env isn't set when the agent opens the app, the rendered output starts with:
 
 ```
-[setup] /open requirements.md
+[!] Missing required env: $MOLTBOOK_API_KEY
+    Set: /set $MOLTBOOK_API_KEY="..."
+    Setup: /open requirements.md
 ```
 
-The agent can `/open` it when an action fails on missing credentials, or skip reading it entirely on the happy path. Zero per-call token cost.
+The "Setup:" line appears only if a requirements doc is registered. So you don't need to repeat it in the body — declare the env, and the warning writes itself.
 
-If the doc lives elsewhere or has a different name, declare it explicitly:
+**2. Setup hint on action failure.** When an action returns non-zero (HTTP error, exit code, missing CLI tool), the error message gets a trailing line:
 
-```markdown
-[!requirements](docs/install.md)
+```
+ERROR(EXIT_127): kubectl: command not found
+
+Setup info: /open requirements.md
 ```
 
-This directive is also the only way to register a setup doc for web-hosted apps (HTTP can't probe siblings). Recommended, not required: zero-config apps like the weather one have no `requirements.md` at all.
+This is how prerequisites that aren't env vars (CLI tools, login state, OS deps) get surfaced — at the moment the agent hits the wall.
+
+### Pointing at the setup doc
+
+The runtime needs to know **where** the setup doc is. Two ways:
+
+- **Sibling auto-detect (local only).** If `requirements.md` exists next to `string.md`, the runtime registers it automatically. No directive needed.
+- **Explicit directive.** Use this for non-standard names, alternate locations, or web-hosted apps where the runtime can't probe siblings:
+
+  ```markdown
+  [!requirements](docs/install.md)
+  ```
+
+The directive line is parsed as metadata and stripped from the rendered body — it doesn't show up in the agent's view.
 
 ## What the file does not need
 
