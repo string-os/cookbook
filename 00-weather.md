@@ -54,7 +54,7 @@ Output:
 <𝒞=string:file:setup>
 Installed app:weather
   Source: /home/you/cookbook/apps/weather/index.md
-  Path: /home/you/.string/users/default/.string/packages/weather/index.md
+  Path: /home/you/.string/users/default/packages/weather/index.md
 Use: /open app:weather
 </𝒞>
 ```
@@ -84,7 +84,7 @@ string app:weather '/open app:weather'
 
 ```
 <𝒞=string:app:weather>
-Opened .string/packages/weather/index.md
+Opened packages/weather/index.md
 ---
 [actions] /act.now --city <string> | /act.forecast --city <string> | /act.search --q <string>
           /act.<name> --help for details
@@ -179,7 +179,7 @@ The agent, using its shell tool, runs four commands. Each of these outputs is **
 ```bash
 $ string app:weather '/open app:weather'
 <𝒞=string:app:weather>
-Opened .string/packages/weather/index.md
+Opened packages/weather/index.md
 ---
 [actions] /act.now --city <string> | /act.forecast --city <string> | /act.search --q <string>
           /act.<name> --help for details
