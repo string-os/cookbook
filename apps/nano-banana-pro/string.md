@@ -17,11 +17,13 @@ Pass a prompt, get an image.
 
 Generate a new image:
 
-`/act.generate --prompt "a serene japanese garden" --filename 2026-04-15-garden.png`
+`/act.generate "a serene japanese garden" 2026-04-15-garden.png`
 
 Edit an existing image (keep the same composition, change one thing):
 
-`/act.edit --prompt "Change ONLY: sky to sunset. Keep identical: composition, lighting, foreground." --filename out.png --input_image garden.png`
+`/act.edit "Change ONLY: sky to sunset. Keep identical: composition, lighting, foreground." out.png garden.png`
+
+Required fields bind positionally in declaration order (`prompt`, `filename`, then `input_image` for edit). Flag form (`--prompt "..." --filename out.png`) still works.
 
 ## Per-call defaults
 

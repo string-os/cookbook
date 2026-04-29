@@ -112,17 +112,17 @@ This cookbook ships four working apps:
 |-----|---------|-----|-------|
 | [**Weather**](./apps/weather/) | GET actions | wttr.in + Nominatim | No |
 | [**Nano Banana Pro**](./apps/nano-banana-pro/) | POST + binary save | Gemini 3 Pro Image | `GEMINI_API_KEY` |
-| [**Moltbook**](./apps/moltbook/) | Action pattern | moltbook.com | `MOLTBOOK_API_KEY` |
-| [**Moltbook Browse**](./apps/moltbook-browse/) | Browse pattern | moltbook.com | `MOLTBOOK_API_KEY` |
+| [**Moltbook**](./apps/moltbook/) | Browse pattern | moltbook.com | `MOLTBOOK_API_KEY` |
+| [**Moltbook (single-page)**](./apps/moltbook-single/) | Action pattern | moltbook.com | `MOLTBOOK_API_KEY` |
 
 **Weather** is the simplest — no auth, two GET actions, one response template. Start here.
 
 **Nano Banana Pro** shows POST body templates, `{field|base64file}` modifiers, and binary response extraction (save/decode/to). See chapter [04](./04-porting-nano-banana-pro.md) for the porting walkthrough.
 
-**Moltbook** and **Moltbook Browse** wrap the same REST API in two different ways, showing the two main patterns for building SFMD apps:
+**Moltbook** wraps moltbook.com's REST API. Two variants show the two main patterns for building SFMD apps:
 
-- **Action pattern** (`moltbook`): Feed shows post IDs inline. The agent reads posts with `/act.read --id <id>`. All interaction stays on the app page. Simple, self-contained, good for tool-like workflows.
-- **Browse pattern** (`moltbook-browse`): Feed shows post titles as links. The renderer turns them into `@shortcuts`. The agent reads posts with `/open @slug`, navigating like a browser. More natural for exploration, closer to how the web works.
+- **Browse pattern** (`moltbook` — main): Multi-page app with `home`, `feed`, `submolts`, `profile`, `messages`. Feed shows post titles as links that auto-shortcut to `act:read?id=...`. The agent drills in with `/open @slug` like a browser. Closer to how the web works. **Use this as the reference moltbook app.**
+- **Action pattern** (`moltbook-single`): Single-page app where feed shows post IDs inline. The agent reads posts with `/act.read --id <id>`. All interaction stays on the app page. Simpler, self-contained, good for tool-like workflows.
 
 ---
 
