@@ -19,31 +19,23 @@ already have all three.
 
 ## API key
 
-The actions read `GEMINI_API_KEY` from the daemon's environment. Get a
-key at [Google AI Studio](https://aistudio.google.com/apikey), then set
-it in the shell that starts `stringd`:
+The actions read `GEMINI_API_KEY` from this app's env scope. Get a key
+at [Google AI Studio](https://aistudio.google.com/apikey), then set it
+from the nano-banana-pro session:
 
-```bash
-export GEMINI_API_KEY=...
-string --daemon start
+```
+string app:nano-banana-pro '/set $GEMINI_API_KEY = "AIza..."'
 ```
 
-If `stringd` was already running before you set the key, restart it so
-it inherits the new env:
-
-```bash
-string --daemon stop && string --daemon start
-```
-
-The actions inherit the daemon's process env, so once the daemon is
-running with the key, every action call uses it automatically. No
-per-call `--api-key` flag.
+The key persists in this app's scope only — no daemon restart needed,
+no shell export needed, no other app can read it. Verify with `/set`
+(no args) inside the same app session.
 
 ## Common failures
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `Method doesn't allow unregistered callers` | `GEMINI_API_KEY` not in daemon env | Set the env var, restart daemon |
+| `Method doesn't allow unregistered callers` | `$GEMINI_API_KEY` not set in this app | `string app:nano-banana-pro '/set $GEMINI_API_KEY = "..."'` |
 | `API key not valid` | Wrong or expired key | Get a fresh one at AI Studio |
 | `PERMISSION_DENIED` | Key has no `gemini-3-pro-image-preview` access | Enable the model on your Google project |
 | `quota exceeded` / `429` | Hit per-minute or per-day rate limit | Wait, or use a different key |

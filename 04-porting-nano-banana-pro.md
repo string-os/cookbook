@@ -94,7 +94,7 @@ The original CLI flags become SFMD fields. There's no creative work here — jus
 | `--input-image` | `input_image` | `string` (required, edit only) | Source image to edit |
 | `--api-key` | *(none)* | — | Comes from env, not a flag |
 
-`--api-key` was a flag in the original because the Python script ran as a fresh subprocess and needed an explicit way to receive the key. In SFMD, the action's header line is `-H "x-goog-api-key: $GEMINI_API_KEY"` — the `$GEMINI_API_KEY` reference is resolved at execution time from the daemon's process env. Once you `export GEMINI_API_KEY=...` and start `stringd`, every action call uses it automatically.
+`--api-key` was a flag in the original because the Python script ran as a fresh subprocess and needed an explicit way to receive the key. In SFMD, the action's header line is `-H "x-goog-api-key: $GEMINI_API_KEY"` — the `$GEMINI_API_KEY` reference is resolved at execution time from the app's env scope. Set the key once with `string app:nano-banana-pro '/set $GEMINI_API_KEY = "..."'` and every action call in that app uses it automatically. Keys are app-scoped: another app can't read them, and shell-exported vars don't leak in.
 
 ---
 
@@ -297,9 +297,8 @@ The result, every time, is a single SFMD file with no helper scripts, no languag
 ```bash
 git clone https://github.com/string-os/cookbook.git
 cd cookbook
-export GEMINI_API_KEY=...   # https://aistudio.google.com/apikey
-string file:setup '/install --app ./apps/nano-banana-pro/index.md'
-string app:nano-banana-pro '/open app:nano-banana-pro'
+string main '/install --app ./apps/nano-banana-pro/string.md'
+string app:nano-banana-pro '/set $GEMINI_API_KEY = "AIza..."'  # https://aistudio.google.com/apikey
 string app:nano-banana-pro '/act.generate --prompt "a vintage red bicycle leaning against a stone wall" --filename bike.png'
 ```
 

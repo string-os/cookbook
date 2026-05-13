@@ -2,43 +2,60 @@
 title: Weather
 name: weather
 type: app
-version: 0.1.0
+version: 0.3.0
+default: now
+requires:
+  - CITY
+description: |
+  Three-action weather app — current, 3-day forecast, free-form
+  location search. Backed by wttr.in and OpenStreetMap Nominatim.
+  No API key. Per-config $CITY for one-touch dashboards.
 ---
 
 # Weather
 
-A three-action weather app, backed by [wttr.in](https://wttr.in) for the
-weather data and [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap)
-for resolving city names. No API key, no signup, no server to run.
-Works the moment it is installed.
+Backed by [wttr.in](https://wttr.in) for weather and
+[Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap) for
+resolving free-form locations. No API key, no signup.
+
+## Per-config dashboards
+
+Each config gets its own `$CITY`. Set once, open instantly:
+
+```
+string app:weather:seoul '/set $CITY = "seoul"'
+string '/open app:weather:seoul'                  # → Seoul weather, no args
+string '/open app:weather:tokyo'                  # ✗ asks you to set $CITY
+```
 
 ## Actions
 
-- `/act.now <city>` — current conditions, one line
-- `/act.forecast <city>` — 3-day forecast with 4 timesteps per day, compact
-  agent-friendly format
-- `/act.search <query>` — resolve a free-form location query (city,
-  country, landmark, airport code, ZIP, GPS) to canonical names you can
-  pass to `now` / `forecast`. Use this first when the user's location
-  is ambiguous (e.g. *"Springfield"*, *"Cambridge"*) or transliterated.
+- `/act.now [city]` — current conditions (uses `$CITY` if no arg)
+- `/act.forecast [city]` — 3-day forecast
+- `/act.search <query>` — resolve ambiguous queries to 5 candidates (registers `@city-N`)
 
-Multi-word cities: quote them — `/act.now "New York"` — or use `+` in
-place of spaces. Flag form (`--city New+York`) also works.
+Multi-word cities: quote them — `/act.now "New York"` — or use `+` for spaces.
 
 ```act.now
 GET https://wttr.in/{city}?format=%l:+%C+%t+%w&m -H "User-Agent: curl/8"
-  city: string (required) "City name"
+  city: string "City name or lat,lon" = "$CITY"
+```
+
+```act.now.response
+{Response.body}
+
+next: /act.forecast {city} for 3-day · /act.search "..." for ambiguous names
 ```
 
 ```act.forecast
 GET https://wttr.in/{city}?format=j1&m -H "User-Agent: curl/8"
-  city: string (required) "City name"
+  city: string "City name or lat,lon" = "$CITY"
 ```
 
 ```act.forecast.response
-{city} = {Response.body.nearest_area[0].areaName[0].value}
+{area} = {Response.body.nearest_area[0].areaName[0].value}
 {country} = {Response.body.nearest_area[0].country[0].value}
-**{city}, {country}** — 3-day forecast (°C, km/h, mm rain)
+**{area}, {country}** — 3-day forecast (°C, km/h, mm rain)
 
 for: day in Response.body.weather
 ### {day.date} ({day.mintempC}–{day.maxtempC}°C, avg {day.avgtempC}°C)
@@ -48,25 +65,22 @@ for: day in Response.body.weather
 - 21: {day.hourly[7].tempC}°C, {day.hourly[7].weatherDesc[0].value}, wind {day.hourly[7].winddir16Point} {day.hourly[7].windspeedKmph}km/h, rain {day.hourly[7].chanceofrain}% ({day.hourly[7].precipMM}mm)
 - sun {day.astronomy[0].sunrise} → {day.astronomy[0].sunset}
 end:
+
+next: /act.now {area} for current · /act.forecast <other-city>
 ```
 
 ```act.search
-GET https://nominatim.openstreetmap.org/search?format=json&limit=5 -H "User-Agent: string-cookbook-weather/0.1"
+GET https://nominatim.openstreetmap.org/search?format=json&limit=5&q={q} -H "User-Agent: string-cookbook-weather/0.2"
   q: string (required) "Free-form location query"
 ```
 
 ```act.search.response
-{top} = {Response.body[0].display_name}
-{lat} = {Response.body[0].lat}
-{lon} = {Response.body[0].lon}
-Top match: {top}
-Coordinates: {lat}, {lon}
+Search: "{q}"
 
-Other matches:
-- {Response.body[1].display_name}
-- {Response.body[2].display_name}
-- {Response.body[3].display_name}
-- {Response.body[4].display_name}
+for: r in Response.body
+{@city} = {r.lat},{r.lon}
+- {@city}: {r.display_name}
+end:
 
-(Pass the top match to /act.now "<top>", or coordinates as /act.now {lat},{lon})
+next: /act.now @city-N · /act.forecast @city-N
 ```
