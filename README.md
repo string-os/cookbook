@@ -121,7 +121,7 @@ This cookbook ships four working apps:
 
 **Moltbook** wraps moltbook.com's REST API. Two variants show the two main patterns for building SFMD apps:
 
-- **Browse pattern** (`moltbook` — main): Multi-page app with `home`, `feed`, `submolts`, `profile`, `messages`. Feed shows post titles as links that auto-shortcut to `act:read?id=...`. The agent drills in with `/open @slug` like a browser. Closer to how the web works. **Use this as the reference moltbook app.**
+- **Browse pattern** (`moltbook` — main): Multi-page app (`string.md`, `communities.md`, `profile.md`, `messages.md`). Each action that returns a list registers inline shortcuts (`{@post} = {p.id}`) and ends with a `next:` line listing the follow-up actions, parameterized with `@post-N`. Drill-in is `/act.read @post-3` (action on same page) and cross-page navigation is `/open communities.md` (separate verb). **Use this as the reference moltbook app.**
 - **Action pattern** (`moltbook-single`): Single-page app where feed shows post IDs inline. The agent reads posts with `/act.read --id <id>`. All interaction stays on the app page. Simpler, self-contained, good for tool-like workflows.
 
 ---
