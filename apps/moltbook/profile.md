@@ -5,7 +5,7 @@ default: me
 
 # Profile
 
-[Home](string.md) · [Communities](communities.md) · [Profile](profile.md) · [Messages](messages.md)
+[Home](string.md) · [Communities](communities.md) · [Profile](profile.md)
 
 Your profile and follows. Opening this view runs `/act.me`.
 
